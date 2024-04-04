@@ -9,19 +9,19 @@ const Login = (props) => {
   const [emailIsValid, setEmailIsValid] = useState();
   const [enteredPassword, setEnteredPassword] = useState('');
   const [passwordIsValid, setPasswordIsValid] = useState();
+  const [enteredCollegeName, setEnteredCollegeName] = useState('');
+  const [collgeIsValid, setCollegeIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
   
 
   useEffect(() => {
     setFormIsValid(
-      enteredEmail.includes('@') && enteredPassword.trim().length > 6
+      enteredEmail.includes('@') && enteredPassword.trim().length > 6 && enteredCollegeName.trim().length > 0
     );
-  }, [enteredEmail, enteredPassword])
+  }, [enteredEmail, enteredPassword, enteredCollegeName])
 
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
-
-
   };
 
   const passwordChangeHandler = (event) => {
@@ -31,6 +31,14 @@ const Login = (props) => {
       event.target.value.trim().length > 6 && enteredEmail.includes('@')
     );
   };
+  
+  const collegeNameChangerHandler = (event) => {
+    setEnteredCollegeName(event.target.value);
+
+    setFormIsValid(
+      event.target.value.trim().length > 0 && enteredEmail.includes('@') && enteredPassword.trim().length > 6
+    );
+  }
 
   const validateEmailHandler = () => {
     setEmailIsValid(enteredEmail.includes('@'));
@@ -40,9 +48,13 @@ const Login = (props) => {
     setPasswordIsValid(enteredPassword.trim().length > 6);
   };
 
+  const validatecollegeNameHandler = () => {
+    setCollegeIsValid(enteredCollegeName.trim().length > 0);
+  }
+
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(enteredEmail, enteredPassword);
+    props.onLogin(enteredEmail, enteredPassword, enteredCollegeName);
   };
 
   return (
@@ -74,6 +86,20 @@ const Login = (props) => {
             value={enteredPassword}
             onChange={passwordChangeHandler}
             onBlur={validatePasswordHandler}
+          />
+        </div>
+        <div
+          className={`${classes.control} ${
+            collgeIsValid === false ? classes.invalid : ''
+          }`}
+        >
+          <label htmlFor="clg">College Name</label>
+          <input
+            type="text"
+            id="clg"
+            value={enteredCollegeName}
+            onChange={collegeNameChangerHandler}
+            onBlur={validatecollegeNameHandler}
           />
         </div>
         <div className={classes.actions}>
